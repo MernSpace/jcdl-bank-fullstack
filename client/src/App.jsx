@@ -5,12 +5,13 @@ import CustomerList from "./page/customerList.jsx";
 import UpdateCustomer from "./page/update-customer.jsx";
 import AddBalancePage from "./page/add-balance-page.jsx";
 import WithdrawBalancePage from "./page/withdraw-balance-page.jsx";
+import HomePage from "./page/home-page.jsx";
 
 function App() {
     return (
         <Router>
             <Routes>
-                <Route path="/"  element={<Dashbord/>} />
+                <Route path="/"  element={<HomePage/>} />
                 <Route path="/add-customer" element={<CreateCustomer/>} />
                 <Route path="/update-customer/:id" element={<UpdateCustomer/>} />
                 <Route path="/customer-list" element={<CustomerList/>} />
