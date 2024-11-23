@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Dashboard from "../component/dashbord.jsx";
 import {
     BarChart,
@@ -9,8 +9,20 @@ import {
     Tooltip,
     Legend
 } from "recharts";
+import customerStore from "../state/customerState.js";
+
 
 const HomePage = () => {
+    const {readCustomerRequest,customerData} = customerStore();
+    useEffect(() => {
+        (async ()=>{
+           await readCustomerRequest()
+
+        })()
+    }, []);
+    const totalBalance = customerData.reduce((total, customer) => {
+        return total + customer.balance;
+    }, 0);
     const data = [
         {
             name: "Page A",
@@ -58,15 +70,19 @@ const HomePage = () => {
     return (
         <Dashboard>
             <div className='d-flex align-items-center justify-content-between px-5 my-5'>
-                <div className='card bg-success text-center p-3 text-white'>
+                <div className='card bg-success text-center p-3 text-white shadow-lg'>
                     <h2>Total Customer</h2>
-                    <h3>150</h3>
+                    <div className='d-flex align-items-center justify-content-center'>
+                        <i className="bi bi-people-fill px-2 fs-3"></i>
+                        <h3 className='fs-2'>{customerData.length}</h3>
+                    </div>
                 </div>
-                <div className='card bg-warning text-center p-3 text-white'>
+                <div className='card bg-warning text-center p-3 text-white shadow-lg'>
                     <h2>Total Deposit Balance</h2>
-                    <h3>$140000</h3>
+                    <h3>$ {totalBalance}</h3>
+
                 </div>
-                <div className='card bg-danger text-center p-3 text-white'>
+                <div className='card bg-danger text-center p-3 text-white shadow-lg'>
                     <h2>Total Interest</h2>
                     <h3>$50000</h3>
                 </div>

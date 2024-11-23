@@ -12,11 +12,14 @@ const dashbord = (props) => {
                 <div className='col-md-12 d-flex'>
                     <div className='col-2 '>
                         <div className="accordion" id="accordionExample">
-                            <div className="accordion-item bg-dark text-white py-2">
-                                <h2 className='gap-2'><i className="bi bi-house-door-fill px-3"></i>
-                                    HOME</h2>
+                            <NavLink to='/'>
+                                <div className="accordion-item bg-dark text-white py-2">
+                                    <h2 className='gap-2'><i className="bi bi-house-door-fill px-3"></i>
+                                        HOME</h2>
 
-                            </div>
+                                </div>
+                            </NavLink>
+
                             <div className="accordion-item ">
                                 <h2 className="accordion-header border-bottom" id="headingTwo">
                                     <button className="accordion-button collapsed " type="button"
