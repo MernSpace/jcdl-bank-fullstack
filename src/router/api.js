@@ -3,6 +3,12 @@ const router = express.Router();
 
 const customerController = require('../controller/customerController');
 const addBalanceController = require('../controller/addBalanceController');
+const userController = require('../controller/userController');
+
+//user API
+router.post('/create-user', userController.createUser);
+router.post('/user-login', userController.loginUser);
+
 
 
 router.post('/create-customer', customerController.createCustomer);

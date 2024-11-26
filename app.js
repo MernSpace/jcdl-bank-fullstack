@@ -11,6 +11,8 @@ const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
 const cors = require('cors');
+require('dotenv').config();
+
 
 // Database Lib Import
 const mongoose = require('mongoose');
