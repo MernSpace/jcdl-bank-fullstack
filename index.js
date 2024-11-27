@@ -1,6 +1,5 @@
 const app=require("./app");
 
-const PORT=5050;
-app.listen(PORT,function () {
-    console.log("App Run "+ PORT);
+app.listen( process.env.PORT, function () {
+    console.log("App Run "+ process.env.PORT);
 })

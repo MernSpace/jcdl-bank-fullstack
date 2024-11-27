@@ -1,6 +1,6 @@
 import {create} from 'zustand';
 import axios  from "axios";
-
+import {API_BASE_URL} from '../helper/apiHelper'
 
 const addBalanceStore = create((set)=>({
     addBalanceFormData:{cusID:"",invoiceID:"",balance:""},
@@ -22,13 +22,13 @@ const addBalanceStore = create((set)=>({
         });
     },
     addBalanceRequest:async(id,postBody)=>{
-        let res = await axios.post(`http://localhost:5050/api/v1/add-balance/${id}`,postBody);
+        let res = await axios.post(`${API_BASE_URL}/add-balance/${id}`,postBody);
         return res.data['status'] ==='success'
     },
 
     customerDetailRequest: async (id) => {
         try {
-            const response = await axios.get(`http://localhost:5050/api/v1/detail-customer/${id}`);
+            const response = await axios.get(`${API_BASE_URL}/detail-customer/${id}`);
             console.log(response.data[0]);
             set({createCustomerFormData:response.data[0]})
 
@@ -42,7 +42,7 @@ const addBalanceStore = create((set)=>({
     customerData:[],
 
     readCustomerRequest:async()=>{
-        let res = await axios.get(`http://localhost:5050/api/v1/read-customer`);
+        let res = await axios.get(`${API_BASE_URL}/read-customer`);
         if (res){
             set({customerData:res['data']})
         }else{
@@ -51,7 +51,7 @@ const addBalanceStore = create((set)=>({
     },
 
     updateCustomerRequest:async(ID,postBody)=>{
-        let res = await axios.post(`http://localhost:5050/api/v1/update-customer/${ID}`,postBody);
+        let res = await axios.post(`${API_BASE_URL}/update-customer/${ID}`,postBody);
         return res.data['status'] === 'success'
     },
 
