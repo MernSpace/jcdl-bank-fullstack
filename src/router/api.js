@@ -24,7 +24,7 @@ router.get('/detail-customer/:id', auth, customerController.detailCustomer);
 
 //balance API
 router.post('/add-balance/:id', auth, addBalanceController.addBalance);
-router.post('/add-all-balance', auth, addBalanceController.readBalanceList);
+router.get('/add-all-balance', auth, addBalanceController.readBalanceList);
 
 router.get('/update-balance/:id', auth, addBalanceController.updateBalance);
 router.get('/delete-balance/:invID', auth, addBalanceController.deleteBalance);

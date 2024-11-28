@@ -2,14 +2,27 @@ import React, { useEffect} from 'react';
 import CustomerState from "../../state/customerState.js";
 import {useParams} from "react-router-dom";
 import {toast} from "react-toastify";
+import {isEmpty} from "../../helper/formHelper.js";
+
 
 const CreateCustomerForm = () => {
     const {createCustomerFormData,createCustomerRequest,CustomerFormOnChange,updateCustomerRequest,resetFormData} = CustomerState();
     const {id}= useParams();
     const onSubmitBtnClick=async()=> {
-        if(id){
+        if(isEmpty(createCustomerFormData.fName)){
+            toast.warning('Name is required');
+        }else if(isEmpty(createCustomerFormData.lName)){
+            toast.warning('Last Name is required');
+        }else if(isEmpty(createCustomerFormData.address)){
+            toast.warning('Address is required');
+        }else if(isEmpty(createCustomerFormData.phone)){
+            toast.warning('Phone number is required');
+        }else if(isEmpty(createCustomerFormData.balance)){
+            toast.warning('Balance is required');
+        }else if(id){
             await updateCustomerRequest(id,createCustomerFormData)
             toast.success('Update customer successfully');
+            resetFormData()
 
         }else {
             await createCustomerRequest(createCustomerFormData);

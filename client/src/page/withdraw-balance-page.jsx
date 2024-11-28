@@ -1,11 +1,11 @@
 import React from 'react';
-import Dashbord from "../component/dashbord.jsx";
+import Dashboard from "../component/dashboard.jsx";
 
 const WithdrawBalancePage = () => {
     return (
-        <Dashbord>
+        <Dashboard>
 
-        </Dashbord>
+        </Dashboard>
     );
 };
 

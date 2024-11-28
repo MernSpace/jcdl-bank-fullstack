@@ -1,14 +1,19 @@
 import React from 'react';
 import { NavLink } from "react-router-dom";
 import {ToastContainer} from "react-toastify";
+import {removeSessions} from "../helper/SessionHelper.jsx";
 
 
-const dashbord = (props) => {
+const dashboard = (props) => {
     return (
         <div className='continer'>
             <ToastContainer />
             <div className='row'>
-                <div className='col-md-12 bg-danger'> <h1 className='text-white text-center fs-1'> Welcome to dashbord</h1></div>
+                <div className='col-md-12 bg-danger d-flex justify-content-between align-items-center px-5'><h1 className='text-white text-center fs-1'> Welcome to
+                    dashbord</h1>
+                    <button className='btn btn-danger shadow-lg' onClick={removeSessions}>Log Out</button>
+                </div>
+
                 <div className='col-md-12 d-flex'>
                     <div className='col-2 '>
                         <div className="accordion" id="accordionExample">
@@ -68,6 +73,13 @@ const dashbord = (props) => {
                                     <div className="accordion-body">
 
                                         <h6 className='gap-2 py-3 border-bottom '>
+                                            <NavLink to='/add-balance-list'
+                                                     className="d-flex align-items-center  text-decoration-none text-black">
+                                                <i className="bi bi-cash mx-2"></i>
+                                                Balance List
+                                            </NavLink>
+                                        </h6>
+                                        <h6 className='gap-2 py-3 border-bottom '>
                                             <NavLink to='/add-balance'
                                                      className="d-flex align-items-center  text-decoration-none text-black">
                                                 <i className="bi bi-cash mx-2"></i>
@@ -97,4 +109,4 @@ const dashbord = (props) => {
     );
 };
 
-export default dashbord;
+export default dashboard;

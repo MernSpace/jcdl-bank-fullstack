@@ -1,6 +1,9 @@
 import {create} from 'zustand';
 import axios  from "axios";
 import {API_BASE_URL} from '../helper/apiHelper'
+import {getToken} from "../helper/SessionHelper.jsx";
+const AxiosHeader={headers:{"token":getToken()}}
+
 
 const addBalanceStore = create((set)=>({
     addBalanceFormData:{cusID:"",invoiceID:"",balance:""},
@@ -22,36 +25,36 @@ const addBalanceStore = create((set)=>({
         });
     },
     addBalanceRequest:async(id,postBody)=>{
-        let res = await axios.post(`${API_BASE_URL}/add-balance/${id}`,postBody);
+        let res = await axios.post(`${API_BASE_URL}/add-balance/${id}`,postBody,AxiosHeader);
         return res.data['status'] ==='success'
     },
 
-    customerDetailRequest: async (id) => {
+    addBalanceDetailRequest: async (id) => {
         try {
-            const response = await axios.get(`${API_BASE_URL}/detail-customer/${id}`);
+            const response = await axios.get(`${API_BASE_URL}/detail-add-balance/${id}`,AxiosHeader);
             console.log(response.data[0]);
-            set({createCustomerFormData:response.data[0]})
+            set({addBalanceFormData:response.data[0]})
 
         } catch (error) {
-            console.error('Error fetching customer details:', error);
+            console.error('Error fetching balance details:', error);
             // Handle error, e.g., display an error message to the user
         }
     },
 
 
-    customerData:[],
+    balanceData:[],
 
-    readCustomerRequest:async()=>{
-        let res = await axios.get(`${API_BASE_URL}/read-customer`);
+    readBalanceListRequest:async()=>{
+        let res = await axios.get(`${API_BASE_URL}/add-all-balance`,AxiosHeader);
         if (res){
-            set({customerData:res['data']})
+            set({balanceData:res['data']})
         }else{
-            set({customerData:[]})
+            set({balanceData:[]})
         }
     },
 
-    updateCustomerRequest:async(ID,postBody)=>{
-        let res = await axios.post(`${API_BASE_URL}/update-customer/${ID}`,postBody);
+    updateBalanceRequest:async(ID,postBody)=>{
+        let res = await axios.post(`${API_BASE_URL}/update-balance/${ID}`,postBody,AxiosHeader);
         return res.data['status'] === 'success'
     },
 

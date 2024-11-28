@@ -31,8 +31,8 @@ const UserLoginForm = () => {
             <div className='row vh-100'>
                 <div className='col-12 d-flex justify-content-center align-items-center'>
                     <div className='col-4'>
-                        <div className='form-group shadow-lg p-5'>
-                            <h2>Create an Account</h2>
+                        <div className='form-group gradient-shadow  p-5'>
+                            <h2>Login</h2>
 
                             <input type='text' value={loginUserFormData.email} onChange={(e) => {
                                 loginFormOnChange('email', e.target.value)

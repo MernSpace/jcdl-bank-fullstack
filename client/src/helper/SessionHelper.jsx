@@ -26,7 +26,8 @@ class SessionHelper{
     }
     removeSessions=()=>{
         localStorage.clear();
-        window.location.href="/login"
+        document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+        window.location.href="/login-user"
     }
 }
 export const {setEmail,getEmail,setOTP,getOTP,setToken,getToken,setUserDetails,getUserDetails,removeSessions}=new SessionHelper();

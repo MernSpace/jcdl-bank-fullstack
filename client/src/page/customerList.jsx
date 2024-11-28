@@ -1,4 +1,4 @@
-import Dashbord from "../component/dashbord.jsx";
+import Dashboard from "../component/dashboard.jsx";
 import CusList from "../component/customer/cusList.jsx";
 import {useEffect} from "react";
 import CustomerState from "../state/customerState.js";
@@ -12,11 +12,11 @@ const customerList=()=> {
         })()
     }, []);
     return (
-        <Dashbord>
+        <Dashboard>
           <div className=''>
               <CusList/>
           </div>
-        </Dashbord>
+        </Dashboard>
     );
 }
 

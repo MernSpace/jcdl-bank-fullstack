@@ -1,5 +1,6 @@
 const addBalanceModel = require('../model/addBalanceModel');
 const customerModel = require('../model/customerModel');
+const mongoose = require('mongoose');
 
 exports.addBalance =async (req, res) => {
     try{
@@ -21,18 +22,68 @@ exports.addBalance =async (req, res) => {
         res.status(500).send({error: e});
     }
 }
+// Path to your balance model
 
+exports.readBalanceList = async (req, res) => {
+    try {
+        const data = await addBalanceModel.aggregate([
+            {
+                // Convert cusID (which is a string) to ObjectId dynamically
+                $addFields: {
+                    cusID: { $toObjectId: "$cusID" }  // Convert cusID to ObjectId
+                }
+            },
+            {
+                // Perform $lookup with customers collection
+                $lookup: {
+                    from: 'customers',  // Make sure this matches the name of your customers collection
+                    localField: 'cusID', // Field from Balance (cusID)
+                    foreignField: '_id', // Field from Customer (_id)
+                    as: 'customerDetails' // Result field that will hold the customer details
+                }
+            },
+            {
+                // Unwind customerDetails if you want a flat result
+                $unwind: {
+                    path: '$customerDetails',
+                    preserveNullAndEmptyArrays: true  // If no matching customer, still include balance data
+                }
+            },
+            {
+                // Project the necessary fields
+                $project: {
+                    _id: 1,
+                    cusID: 1,
+                    balance: 1,
+                    invoiceID: 1,
+                    customerDetails: {
+                        _id: 1,
+                        fName: 1, // Include relevant fields from the customer model
+                        address: 1,
+                        phone: 1
+                    },
+                    createdAt: 1,
+                    updatedAt: 1
+                }
+            }
+        ]);
 
+        // Send the result
+        if (data.length === 0) {
+            return res.status(404).json({ message: "No balances found or customers not linked." });
+        }
 
-exports.readBalanceList =async (req, res) => {
-    try{
-        let data =await addBalanceModel.find({});
         res.status(200).json(data);
+
+    } catch (e) {
+        console.error(e);  // Log error for debugging
+        res.status(500).send({ error: e.message });
     }
-    catch (e) {
-        res.status(500).send({error: e});
-    }
-}
+};
+
+
+
+
 
 
 exports.updateBalance = async (req, res) => {

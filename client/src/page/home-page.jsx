@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import Dashboard from "../component/dashbord.jsx";
+import Dashboard from "../component/dashboard.jsx";
 import {
     BarChart,
     Bar,

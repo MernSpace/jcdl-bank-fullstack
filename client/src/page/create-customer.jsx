@@ -1,13 +1,13 @@
 import React, {useEffect} from 'react';
-import Dashbord from '../component/dashbord';
+import Dashboard from '../component/dashboard.jsx';
 import CreateCustomerForm from "../component/customer/createCustomerForm";
 
 const createCustomer = () => {
 
     return (
-        <Dashbord>
+        <Dashboard>
         <CreateCustomerForm />
-        </Dashbord>
+        </Dashboard>
     );
 };
 

@@ -1,7 +1,7 @@
 const mongoose= require('mongoose');
 const {Types} = require("mongoose");
 const dataSchema= mongoose.Schema({
-    cusID:{type:String},
+    cusID: { type: mongoose.Schema.Types.ObjectId, ref: 'Customer' },
     balance:{type:Number},
     invoiceID:{type:String},
 },{ timestamps:true ,versionKey:false});
