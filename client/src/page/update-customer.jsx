@@ -35,10 +35,24 @@ const UpdateCustomer = () => {
                     <tbody>
                     {balanceDetail.length > 0 ? (
                         balanceDetail.map((customer, index) => {
-                            const createdDate = new Date(customer.customerBalanceDetails.createdAt);
+                            let formattedDate = ""; // Default value
 
-                            // Format the createdAt date (Example: "DD/MM/YYYY")
-                            const formattedDate = `${createdDate.getDate()}/${createdDate.getMonth() + 1}/${createdDate.getFullYear()}`;
+                            if (customer.customerBalanceDetails && customer.customerBalanceDetails.createdAt) {
+                                const createdDate = new Date(customer.customerBalanceDetails.createdAt);
+
+                                // Format the createdAt date (Example: "DD/MM/YYYY")
+                                formattedDate = `${createdDate.getDate()}/${createdDate.getMonth() + 1}/${createdDate.getFullYear()}`;
+                            } else {
+                                // Provide a fallback if createdAt doesn't exist
+                                formattedDate = "N/A"; // You can set any default value or leave it blank
+                            }
+                            const invoiceID = customer.customerBalanceDetails && customer.customerBalanceDetails.invoiceID
+                                ? customer.customerBalanceDetails.invoiceID
+                                : "N/A"; // Default if invoiceID is missing
+
+                            const balance = customer.customerBalanceDetails && customer.customerBalanceDetails.balance
+                                ? customer.customerBalanceDetails.balance
+                                : "N/A"; // Default if balance is missing
 
                             return (
                                 <tr key={customer.id || index}>
@@ -46,8 +60,8 @@ const UpdateCustomer = () => {
                                     <td>{customer.fName}</td>
                                     <td>{customer.phone}</td>
                                     <td>{customer.address}</td>
-                                    <td>{customer.customerBalanceDetails.invoiceID}</td>
-                                    <td>{customer.customerBalanceDetails.balance}</td>
+                                    <td>{invoiceID}</td>
+                                    <td>{balance}</td>
                                     <td>{formattedDate}</td>
                                 </tr>
                             )
