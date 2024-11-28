@@ -28,25 +28,24 @@ exports.readBalanceList = async (req, res) => {
     try {
         const data = await addBalanceModel.aggregate([
             {
-                // Convert cusID (which is a string) to ObjectId dynamically
+
                 $addFields: {
-                    cusID: { $toObjectId: "$cusID" }  // Convert cusID to ObjectId
+                    cusID: { $toObjectId: "$cusID" }
                 }
             },
             {
-                // Perform $lookup with customers collection
+
                 $lookup: {
-                    from: 'customers',  // Make sure this matches the name of your customers collection
-                    localField: 'cusID', // Field from Balance (cusID)
-                    foreignField: '_id', // Field from Customer (_id)
-                    as: 'customerDetails' // Result field that will hold the customer details
+                    from: 'customers',
+                    localField: 'cusID',
+                    foreignField: '_id',
+                    as: 'customerDetails'
                 }
             },
             {
-                // Unwind customerDetails if you want a flat result
                 $unwind: {
                     path: '$customerDetails',
-                    preserveNullAndEmptyArrays: true  // If no matching customer, still include balance data
+                    preserveNullAndEmptyArrays: true
                 }
             },
             {
@@ -58,22 +57,35 @@ exports.readBalanceList = async (req, res) => {
                     invoiceID: 1,
                     customerDetails: {
                         _id: 1,
-                        fName: 1, // Include relevant fields from the customer model
+                        fName: 1,
                         address: 1,
                         phone: 1
                     },
                     createdAt: 1,
                     updatedAt: 1
                 }
+            },
+            {
+
+                $sort: {
+                    createdAt: -1
+                }
             }
         ]);
 
+        const formattedData = data.map((item) => {
+            const createdDate = new Date(item.createdAt);
+            const formattedDate = `${createdDate.getMonth() + 1}/${createdDate.getDate()}/${createdDate.getFullYear()}`;
+            item.createdAt = formattedDate; // Set the formatted date
+            return item;
+        });
+
         // Send the result
-        if (data.length === 0) {
+        if (formattedData.length === 0) {
             return res.status(404).json({ message: "No balances found or customers not linked." });
         }
 
-        res.status(200).json(data);
+        res.status(200).json(formattedData);  // Send the formatted data
 
     } catch (e) {
         console.error(e);  // Log error for debugging

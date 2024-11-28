@@ -20,6 +20,7 @@ router.get('/read-customer', auth, customerController.readCustomer);
 router.post('/update-customer/:id', auth, customerController.updateCustomer);
 router.get('/delete-customer/:id', auth, customerController.deleteCustomer);
 router.get('/detail-customer/:id', auth, customerController.detailCustomer);
+router.get('/customer-balance-detail/:id', auth, customerController.customerBalanceDetail);
 
 
 //balance API

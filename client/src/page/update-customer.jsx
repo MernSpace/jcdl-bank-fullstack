@@ -3,19 +3,63 @@ import Dashboard from "../component/dashboard.jsx";
 import CreateCustomerForm from "../component/customer/createCustomerForm.jsx";
 import {useParams} from "react-router-dom";
 import customerStore from "../state/customerState.js";
+import Table from "react-bootstrap/Table";
 
 const UpdateCustomer = () => {
     const {id} = useParams();
-    console.log(id);
-    const {customerDetailRequest} = customerStore()
+    const {customerDetailRequest,customerBalanceDetailRequest,balanceDetail} = customerStore()
     useEffect(() => {
         ( async ()=>{
             await customerDetailRequest(id);
+            await customerBalanceDetailRequest(id)
+
         })()
     }, [id]);
+    console.log(balanceDetail)
     return (
         <Dashboard>
-            <CreateCustomerForm />
+            <CreateCustomerForm/>
+            <div className=' px-3  mt-5'>
+                <Table striped bordered hover>
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Customer Name</th>
+                        <th>Customer Phone</th>
+                        <th>Customer Address</th>
+                        <th>Invoice No:</th>
+                        <th>Balance</th>
+                        <th>Date</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {balanceDetail.length > 0 ? (
+                        balanceDetail.map((customer, index) => {
+                            const createdDate = new Date(customer.customerBalanceDetails.createdAt);
+
+                            // Format the createdAt date (Example: "DD/MM/YYYY")
+                            const formattedDate = `${createdDate.getDate()}/${createdDate.getMonth() + 1}/${createdDate.getFullYear()}`;
+
+                            return (
+                                <tr key={customer.id || index}>
+                                    <td>{index + 1}</td>
+                                    <td>{customer.fName}</td>
+                                    <td>{customer.phone}</td>
+                                    <td>{customer.address}</td>
+                                    <td>{customer.customerBalanceDetails.invoiceID}</td>
+                                    <td>{customer.customerBalanceDetails.balance}</td>
+                                    <td>{formattedDate}</td>
+                                </tr>
+                            )
+                        })
+                    ) : (
+                        <tr>
+                            <td colSpan="7">No customers available</td>
+                        </tr>
+                    )}
+                    </tbody>
+                </Table>
+            </div>
         </Dashboard>
     );
 };
