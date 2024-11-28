@@ -4,32 +4,33 @@ const router = express.Router();
 const customerController = require('../controller/customerController');
 const addBalanceController = require('../controller/addBalanceController');
 const userController = require('../controller/userController');
+const auth = require('../auth/userAuth');
 
 //user API
 router.post('/create-user', userController.createUser);
 router.post('/user-login', userController.loginUser);
-router.get('/user-detail/:id', userController.detailUser);
-router.post('/user-update/:id', userController.updateUser);
-router.get('/user-delete/:id', userController.deleteUser);
+router.get('/user-detail/:id', auth, userController.detailUser);
+router.post('/user-update/:id', auth, userController.updateUser);
+router.get('/user-delete/:id', auth, userController.deleteUser);
 
 
 //customer API
-router.post('/create-customer', customerController.createCustomer);
-router.get('/read-customer', customerController.readCustomer);
-router.post('/update-customer/:id', customerController.updateCustomer);
-router.get('/delete-customer/:id', customerController.deleteCustomer);
-router.get('/detail-customer/:id', customerController.detailCustomer);
+router.post('/create-customer', auth, customerController.createCustomer);
+router.get('/read-customer', auth, customerController.readCustomer);
+router.post('/update-customer/:id', auth, customerController.updateCustomer);
+router.get('/delete-customer/:id', auth, customerController.deleteCustomer);
+router.get('/detail-customer/:id', auth, customerController.detailCustomer);
 
 
 //balance API
-router.post('/add-balance/:id', addBalanceController.addBalance);
-router.post('/add-all-balance', addBalanceController.readBalanceList);
+router.post('/add-balance/:id', auth, addBalanceController.addBalance);
+router.post('/add-all-balance', auth, addBalanceController.readBalanceList);
 
-router.get('/update-balance/:id', addBalanceController.updateBalance);
-router.get('/delete-balance/:invID', addBalanceController.deleteBalance);
-router.get('/detail-add-balance/:id', addBalanceController.detailBalance);
+router.get('/update-balance/:id', auth, addBalanceController.updateBalance);
+router.get('/delete-balance/:invID', auth, addBalanceController.deleteBalance);
+router.get('/detail-add-balance/:id', auth, addBalanceController.detailBalance);
 
 //
 
 
-module.exports=router;
+module.exports = router;

@@ -10,13 +10,16 @@ import {
     Legend
 } from "recharts";
 import customerStore from "../state/customerState.js";
+import userStore from "../state/userState.js";
 
 
 const HomePage = () => {
     const {readCustomerRequest,customerData} = customerStore();
+    const {userDetailRequest} = userStore()
     useEffect(() => {
         (async ()=>{
            await readCustomerRequest()
+            await userDetailRequest('6747f4336a161df8d90a5c02')
 
         })()
     }, []);

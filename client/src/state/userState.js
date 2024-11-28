@@ -1,7 +1,8 @@
 import {create} from 'zustand';
 import axios  from "axios";
-import {API} from '../helper/apiHelper'
-
+import {API_BASE_URL} from '../helper/apiHelper'
+import {setToken,getToken} from "../helper/SessionHelper.jsx";
+const AxiosHeader={headers:{"token":getToken()}}
 
 const userStore = create((set)=>({
     createUserFormData:{Name:"",email:"",password:"",phone:''},
@@ -24,7 +25,7 @@ const userStore = create((set)=>({
         });
     },
     createUserRequest:async(postBody)=>{
-        let res = await axios.post(`${API}/create-user`,postBody);
+        let res = await axios.post(`${API_BASE_URL}/create-user`,postBody);
         return res.data['status'] ==='success'
     },
 
@@ -38,16 +39,24 @@ const userStore = create((set)=>({
             }
         }))
     },
+    resetLoginFormData: () => {
+        set({
+            loginUserFormData: {
+                email: "",
+                password: "",
+            }
+        });
+    },
 
 
     loginUserRequest:async(postBody)=>{
-        let res = await axios.post(`${API}/user-login`,postBody);
+        let res = await axios.post(`${API_BASE_URL}/user-login`,postBody);
+        setToken(res.data.token)
         return res.data['status'] ==='success'
     },
     userDetailRequest: async (id) => {
         try {
-            const response = await axios.get(`${API}/user-detail/${id}`);
-            console.log(response.data[0]);
+            const response = await axios.get(`${API_BASE_URL}/user-detail/${id}`,AxiosHeader);
             set({createUserFormData:response.data[0]})
 
         } catch (error) {
@@ -60,7 +69,7 @@ const userStore = create((set)=>({
     userData:[],
 
     readUserRequest:async()=>{
-        let res = await axios.get(`${API}/read-user`);
+        let res = await axios.get(`${API_BASE_URL}/read-user`);
         if (res){
             set({userData:res['data']})
         }else{
@@ -69,12 +78,12 @@ const userStore = create((set)=>({
     },
 
     updateUserRequest:async(ID,postBody)=>{
-        let res = await axios.post(`${API}/user-update/${ID}`,postBody);
+        let res = await axios.post(`${API_BASE_URL}/user-update/${ID}`,postBody);
         return res.data['status'] === 'success'
     },
 
     deleteUserRequest:async(ID)=>{
-        let res = await axios.get(`${API}/user-delete/${ID}`);
+        let res = await axios.get(`${API_BASE_URL}/user-delete/${ID}`);
         return res.data['status'] === 'success'
     },
 
