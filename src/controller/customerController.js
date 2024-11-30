@@ -1,5 +1,6 @@
 const customerModel = require('../model/customerModel');
 const mongoose = require('mongoose');
+const addBalanceModel = require('../model/addBalanceModel');
 
 
 exports.createCustomer =async (req, res) => {
@@ -42,7 +43,8 @@ exports.deleteCustomer =async (req, res) => {
     try{
         let cusID = req.params.id;
         let data = await customerModel.deleteOne({_id:cusID});
-        res.status(201).json(data);
+        let BalanceData = await addBalanceModel.deleteMany({cusID:cusID})
+        res.status(201).json({data,BalanceData});
     }
     catch (e) {
         res.status(500).send({error: e});

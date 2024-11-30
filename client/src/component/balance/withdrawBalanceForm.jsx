@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import Select from 'react-select';
+import Select from "react-select";
+import {toast} from "react-toastify";
 import customerStore from "../../state/customerState.js";
 import addBalanceState from "../../state/addBalanceState.js";
-import {toast} from "react-toastify";
 
-const AddBalanceForm = () => {
-    const {readCustomerRequest,customerData,customerDetailRequest,createCustomerFormData,resetFormData} = customerStore();
-    const {addBalanceRequest,addBalanceFormData,addBalanceFormOnChange,resetBalanceFormData} = addBalanceState();
+const WithdrawBalanceForm = () => {
+    const {createCustomerFormData,readCustomerRequest,customerDetailRequest,customerData,resetBalanceFormData} = customerStore();
+    const {withdrawBalanceRequest,withdrewBalanceFormData,withdrawBalanceFormOnChange,resetWithdrewBalanceForm} = addBalanceState();
     const [selectedUserId, setSelectedUserId] = useState(null);
 
     useEffect(() => {
@@ -23,7 +23,7 @@ const AddBalanceForm = () => {
         console.log(selectedOption)
         const userId = selectedOption ? selectedOption.value : null;
         setSelectedUserId(userId);
-        console.log(selectedUserId)
+        console.log(userId)
     };
     useEffect(() => {
         if (selectedUserId) {
@@ -34,16 +34,21 @@ const AddBalanceForm = () => {
     }, [selectedUserId]);
 
     const onClick= async ()=>{
-        await addBalanceRequest(selectedUserId,addBalanceFormData);
-        toast.info('Balance Added successfully');
-        resetFormData();
-        resetBalanceFormData();
+        let investAmount = createCustomerFormData.balance;
+        let withdrewAmount = withdrewBalanceFormData.balance;
+        if(withdrewAmount > investAmount){
+            toast.error('No Enough investments');
+        }else {
+            await withdrawBalanceRequest(selectedUserId, withdrewBalanceFormData);
+            toast.info('Balance Added successfully');
+            resetBalanceFormData();
+            resetWithdrewBalanceForm()
+        }
     }
-
     return (
         <div className='col-10 px-5 mt-5 justify-content-center align-items-center'>
             <div>
-                <Select options={options} onChange={handleChange}  placeholder="Search Customer and Select"/>
+                <Select options={options} onChange={handleChange} placeholder="Search Customer and Select"/>
             </div>
             <div className='col-12 px-2 mt-5'>
 
@@ -89,28 +94,32 @@ const AddBalanceForm = () => {
                                aria-describedby="basic-addon1"/>
                     </div>
                     <div className=" mb-3 w-50 gap-2">
-                        <span className="form-label fs-5 fw-bold" id="basic-addon1">Add Balance</span>
-                        <input type="number" value={addBalanceFormData.balance} onChange={(e)=>{addBalanceFormOnChange('balance',e.target.value)}}
+                        <span className="form-label fs-5 fw-bold" id="basic-addon1">Withdrew Balance</span>
+                        <input type="number" value={withdrewBalanceFormData.balance}
+                               onChange={(e) => {
+                                   withdrawBalanceFormOnChange('balance', e.target.value)
+                               }}
                                className="form-control border-1 mt-2 border-success rounded-2 shadow-sm p-2 "
-                               placeholder="Add Balance" aria-label="CusInvest"
+                               placeholder="Withdrew Balance" aria-label="CusInvest"
                                aria-describedby="basic-addon1"/>
                     </div>
                 </div>
                 <div className='d-flex align-items-center gap-5 mt-5'>
                     <div className=" mb-3 w-50 gap-2">
                         <span className="form-label fs-5 fw-bold" id="basic-addon1">Check Number</span>
-                        <input type="number" value={addBalanceFormOnChange.invoiceID} onChange={(e) => {
-                            addBalanceFormOnChange('invoiceID', e.target.value)
-                        }}
+                        <input type="number"
+                               value={withdrewBalanceFormData.invoiceID}
+                               onChange={(e) => {
+                                   withdrawBalanceFormOnChange('invoiceID', e.target.value)
+                               }}
                                className="form-control border-1 mt-2 border-success rounded-2 shadow-sm p-2 "
                                placeholder="Check Number" aria-label="CusInvest"
                                aria-describedby="basic-addon1"/>
                     </div>
                     <div className=" mb-3 w-50 gap-2 d-none">
                         <span className="form-label fs-5 fw-bold" id="basic-addon1">Customer ID</span>
-                        <input type="text" value={addBalanceFormData.cusID = selectedUserId} onChange={(e) => {
-                            addBalanceFormOnChange('cusID', e.target.value)
-                        }}
+                        <input type="text"
+                               value={withdrewBalanceFormData.cusID = selectedUserId}
                                className="form-control border-1 mt-2 border-success rounded-2 shadow-sm p-2 "
                                placeholder="Last Balance" aria-label="CusInvest" disabled
                                aria-describedby="basic-addon1"/>
@@ -125,4 +134,4 @@ const AddBalanceForm = () => {
     );
 };
 
-export default AddBalanceForm;
+export default WithdrawBalanceForm;

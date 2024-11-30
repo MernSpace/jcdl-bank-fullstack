@@ -4,6 +4,7 @@ const router = express.Router();
 const customerController = require('../controller/customerController');
 const addBalanceController = require('../controller/addBalanceController');
 const userController = require('../controller/userController');
+const interestBalanceController = require('../controller/interestBalanceContorller');
 const auth = require('../auth/userAuth');
 
 //user API
@@ -31,7 +32,20 @@ router.get('/update-balance/:id', auth, addBalanceController.updateBalance);
 router.get('/delete-balance/:invID', auth, addBalanceController.deleteBalance);
 router.get('/detail-add-balance/:id', auth, addBalanceController.detailBalance);
 
-//
+router.post('/withdraw-balance/:cusID', auth, addBalanceController.withdrawBalance);
+
+//interest API
+
+router.post('/add-interest/:id',auth,interestBalanceController.addInterestBalance)
+router.get('/all-interest-balance', auth, interestBalanceController.readInterestBalanceList);
+
+router.get('/update-interest/:id', auth, interestBalanceController.addInterestBalance);
+router.get('/delete-interest/:invID', auth, interestBalanceController.deleteInterestBalance);
+router.get('/detail-interest-balance/:id', auth, interestBalanceController.detailInterestBalance);
+
+
+
+
 
 
 module.exports = router;

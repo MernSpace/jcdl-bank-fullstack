@@ -1,7 +1,7 @@
 import {create} from 'zustand';
 import axios from "axios";
 import {API_BASE_URL} from '../helper/apiHelper'
-import {getToken} from "../helper/SessionHelper.jsx";
+import {getToken} from "../helper/SessionHelper.js";
 
 const AxiosHeader = {headers: {"token": getToken()}}
 
@@ -69,6 +69,10 @@ const customerStore = create((set) => ({
         let res = await axios.post(`${API_BASE_URL}/update-customer/${ID}`, postBody, AxiosHeader);
         return res.data['status'] === 'success'
     },
+    deleteCustomerRequest: async (id)=>{
+        let res = await axios.get(`${API_BASE_URL}/delete-customer/${id}`,AxiosHeader)
+        return res.data['status'] === 'success'
+    }
 
 }))
 

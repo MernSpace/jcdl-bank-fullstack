@@ -1,22 +1,22 @@
-const addBalanceModel = require('../model/addBalanceModel');
+const interestBalanceModel = require('../model/interestBalanceModel');
 const customerModel = require('../model/customerModel');
 const mongoose = require('mongoose');
 
-exports.addBalance =async (req, res) => {
+exports.addInterestBalance =async (req, res) => {
     try{
-      let postBody = req.body;
-      let cusID = req.params.id;
-      postBody.cusID = cusID;
+        let postBody = req.body;
+        let cusID = req.params.id;
+        postBody.cusID = cusID;
 
-      let data = await customerModel.find({_id:cusID});
-      let previousBalance =(data[0].balance)
+        let data = await customerModel.find({_id:cusID});
+        let previousBalance =(data[0].balance)
         let newBalance = parseInt(previousBalance, 10) + parseInt(postBody.balance, 10);
 
-      let Query = {_id:cusID};
-      let customerBalanceData = await customerModel.updateOne(Query,{balance:newBalance});
+        let Query = {_id:cusID};
+        let customerBalanceData = await customerModel.updateOne(Query,{balance:newBalance});
 
-      let createData = await addBalanceModel.create(postBody)
-      res.status(200).json({createData,customerBalanceData});
+        let createData = await interestBalanceModel.create(postBody)
+        res.status(200).json({createData,customerBalanceData});
     }
     catch (e) {
         res.status(500).send({error: e});
@@ -24,9 +24,9 @@ exports.addBalance =async (req, res) => {
 }
 // Path to your balance model
 
-exports.readBalanceList = async (req, res) => {
+exports.readInterestBalanceList = async (req, res) => {
     try {
-        const data = await addBalanceModel.aggregate([
+        const data = await interestBalanceModel.aggregate([
             {
 
                 $addFields: {
@@ -98,11 +98,11 @@ exports.readBalanceList = async (req, res) => {
 
 
 
-exports.updateBalance = async (req, res) => {
+exports.updateInterestBalance = async (req, res) => {
     try{
         let id = req.params.id;
         let Query = {_id:id};
-        let data = await addBalanceModel.find(Query)
+        let data = await interestBalanceModel.find(Query)
 
         res.status(200).json({
             data: data,
@@ -114,10 +114,10 @@ exports.updateBalance = async (req, res) => {
     }
 }
 
-exports.deleteBalance =async (req, res) => {
+exports.deleteInterestBalance =async (req, res) => {
     try{
         let ads = req.params.invID;
-        let balanceData = await addBalanceModel.findById({_id:ads});
+        let balanceData = await interestBalanceModel.findById({_id:ads});
 
         let cID = (balanceData.cusID)
         let addBalance = (balanceData.balance)
@@ -128,7 +128,7 @@ exports.deleteBalance =async (req, res) => {
 
         let upBalance = parseInt(cusBalance) - parseInt(addBalance)
         let upData = await  customerModel.updateOne({_id:cID},{balance:upBalance});
-        let deleteData = await  addBalanceModel.deleteOne({_id:ads});
+        let deleteData = await  interestBalanceModel.deleteOne({_id:ads});
 
 
         res.status(200).json({deleteData, upData});
@@ -139,10 +139,10 @@ exports.deleteBalance =async (req, res) => {
 }
 
 
-exports.detailBalance =async (req, res) => {
+exports.detailInterestBalance =async (req, res) => {
     try{
         let ads = req.params.id;
-        let data =await addBalanceModel.find({_id:ads});
+        let data =await interestBalanceModel.find({_id:ads});
 
         let cID = (data[0].cusID)
         let cusQuery = {_id: cID}
@@ -155,23 +155,3 @@ exports.detailBalance =async (req, res) => {
     }
 }
 
-
-exports.withdrawBalance =async (req, res) => {
-    try{
-        let cusID = req.params.cusID;
-        let withdrawBalance = req.body.balance
-        let cusDetail = await customerModel.findById({_id:cusID})
-        let cusBalance = (cusDetail.balance)
-
-        let upBalance = parseInt(cusBalance) - parseInt(withdrawBalance)
-        let upData = await  customerModel.updateOne({_id:cusID},{balance:upBalance});
-
-        let createData = await addBalanceModel.create(req.body);
-
-
-        res.status(200).json({ upData,createData});
-    }
-    catch (e) {
-        res.status(500).send({error: e});
-    }
-}

@@ -1,14 +1,26 @@
 import React, {useEffect} from 'react';
 import addBalanceStore from "../../state/addBalanceState.js";
 import Table from "react-bootstrap/Table";
+import {DeleteAlert} from "../../helper/deleteAlert.js";
 
 const AddBalanceList = () => {
-    const {readBalanceListRequest,balanceData}= addBalanceStore()
+    const {readBalanceListRequest,balanceData,deleteBalanceRequest}= addBalanceStore()
     useEffect(() => {
         (async ()=>{
             await readBalanceListRequest()
         })()
     }, []);
+
+    const DeleteItem = async (id) => {
+        let Result = await DeleteAlert();
+        console.log(id)
+        if (Result.isConfirmed) {
+            let DeleteResult = await deleteBalanceRequest(id)
+            if (DeleteResult) {
+                await readBalanceListRequest();
+            }
+        }
+    }
 
     return (
         <div>
@@ -23,6 +35,7 @@ const AddBalanceList = () => {
                         <th>Invoice No:</th>
                         <th>Balance</th>
                         <th>Date</th>
+                        <th>Action</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -42,6 +55,10 @@ const AddBalanceList = () => {
                                    <td>{customer.invoiceID}</td>
                                    <td>{customer.balance}</td>
                                    <td>{formattedDate}</td>
+                                   <td className='text-center'>
+                                       <button className='btn btn-success mx-2'>Edit</button>
+                                       <button className='btn btn-danger'  onClick={DeleteItem.bind(this, customer._id)}>delete</button>
+                                   </td>
                                </tr>
                            )
                         })

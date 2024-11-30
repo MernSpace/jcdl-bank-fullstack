@@ -2,7 +2,7 @@ import React from 'react';
 import userState from "../../state/userState.js";
 import {isEmpty} from "../../helper/formHelper.js";
 import {toast, ToastContainer} from "react-toastify";
-import { useNavigate } from 'react-router-dom'; // React Router v6+ navigate
+import {NavLink, useNavigate} from 'react-router-dom'; // React Router v6+ navigate
 
 
 const UserLoginForm = () => {
@@ -31,7 +31,7 @@ const UserLoginForm = () => {
             <div className='row vh-100'>
                 <div className='col-12 d-flex justify-content-center align-items-center'>
                     <div className='col-4'>
-                        <div className='form-group gradient-shadow  p-5'>
+                        <div className='form-group shadow-lg  p-5'>
                             <h2>Login</h2>
 
                             <input type='text' value={loginUserFormData.email} onChange={(e) => {
@@ -41,6 +41,14 @@ const UserLoginForm = () => {
                                 loginFormOnChange('password', e.target.value)
                             }} placeholder='Password' className='form-control my-4'/>
                             <input type='submit' onClick={onSubmit} className='btn btn-primary btn-block'/>
+                            <button className='btn btn-success w-100 text-center my-5'>
+                                <NavLink to='/register-user'
+                                         className='text-decoration-none'>
+                                    <p className='text-white py-2'>Create An Account</p>
+                                </NavLink>
+                            </button>
+
+
                         </div>
                     </div>
                 </div>

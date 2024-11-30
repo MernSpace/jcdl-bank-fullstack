@@ -21,7 +21,7 @@ const CreateUserForm = () => {
             await createUserRequest(createUserFormData);
             resetFormData();
             toast.success('Successfully created!');
-            navigation('/login-user')
+            navigation('/login')
 
         }
 

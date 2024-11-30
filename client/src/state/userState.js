@@ -1,7 +1,7 @@
 import {create} from 'zustand';
 import axios  from "axios";
 import {API_BASE_URL} from '../helper/apiHelper'
-import {setToken,getToken} from "../helper/SessionHelper.jsx";
+import {setToken,getToken} from "../helper/SessionHelper.js";
 const AxiosHeader={headers:{"token":getToken()}}
 
 const userStore = create((set)=>({

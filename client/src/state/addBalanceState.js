@@ -1,7 +1,7 @@
 import {create} from 'zustand';
 import axios  from "axios";
 import {API_BASE_URL} from '../helper/apiHelper'
-import {getToken} from "../helper/SessionHelper.jsx";
+import {getToken} from "../helper/SessionHelper.js";
 const AxiosHeader={headers:{"token":getToken()}}
 
 
@@ -57,6 +57,34 @@ const addBalanceStore = create((set)=>({
         let res = await axios.post(`${API_BASE_URL}/update-balance/${ID}`,postBody,AxiosHeader);
         return res.data['status'] === 'success'
     },
+    deleteBalanceRequest:async(ID)=>{
+        let res = await axios.get(`${API_BASE_URL}/delete-balance/${ID}`,AxiosHeader);
+        return res.data['status'] === 'success'
+    },
+
+    withdrewBalanceFormData:{cusID:"",invoiceID:"",balance:""},
+    withdrawBalanceFormOnChange:(name,value)=>{
+        set((state)=>({
+            withdrewBalanceFormData:{
+                ...state.withdrewBalanceFormData,
+                [name]:value
+            }
+        }))
+    },
+    resetWithdrewBalanceForm: () => {
+        set({
+            withdrewBalanceFormData: {
+                cusID: "",
+                invoiceID: "",
+                balance: "",
+            }
+        });
+    },
+    withdrawBalanceRequest:async (id,postBody)=>{
+        let res = await axios.post(`${API_BASE_URL}/withdraw-balance/${id}`,postBody,AxiosHeader)
+        return res.data['status'] === 'success'
+    }
+
 
 }))
 
