@@ -1,6 +1,7 @@
 const interestBalanceModel = require('../model/interestBalanceModel');
 const customerModel = require('../model/customerModel');
 const mongoose = require('mongoose');
+const withdrewModel = require("../model/withdrawBalanceModel");
 
 exports.addInterestBalance =async (req, res) => {
     try{
@@ -152,6 +153,66 @@ exports.detailInterestBalance =async (req, res) => {
     }
     catch (e) {
         res.status(500).send({error: e});
+    }
+}
+
+
+exports.customerInterestBalanceList = async (req,res)=>{
+    try {
+        const id = req.params.id;
+
+        const data = await interestBalanceModel.aggregate([
+            {
+                // Match the customer by the id (convert to ObjectId if necessary)
+                $match: {
+                    cusID:  new mongoose.Types.ObjectId(id)
+                }
+            },
+            {
+                // Lookup the balance details from the 'adds' collection
+                $lookup: {
+                    from: 'customers',  // The 'adds' collection
+                    localField: 'cusID',  // Match _id from the customers collection
+                    foreignField: '_id',  // Match cusID from the adds collection
+                    as: 'customerInterestDetails'  // Store the results in 'customerBalanceDetails'
+                }
+            },
+            {
+                // Unwind to flatten the customerBalanceDetails array
+                $unwind: {
+                    path: '$customerInterestDetails',
+                    preserveNullAndEmptyArrays: true  // Keep customer even if there's no matching balance details
+                }
+            },
+            {
+                // Sort the balance details by createdAt in descending order (latest first)
+                $sort: {
+                    'customerInterestDetails.createdAt': -1  // Sort the balance details
+                }
+            },
+            {
+                // Project the necessary fields from the customer and customerBalanceDetails
+                $project: {
+                    _id: 1,  // Customer ID
+                    balance: 1,  // Customer first name
+                    invoiceID: 1,  // Customer address
+                    phone: 1,  // Customer phone
+                    customerInterestDetails: 1  // Balance details (including createdAt, invoiceID, balance, etc.)
+                }
+            }
+        ]);
+
+        // Check if data exists for the customer
+        if (data.length === 0) {
+            return res.status(404).json({ message: "Customer not found or no balance details available." });
+        }
+
+        // Send the result
+        res.status(200).json(data);
+
+    } catch (e) {
+        console.error(e);  // Log error for debugging
+        res.status(500).send({ error: e.message });
     }
 }
 

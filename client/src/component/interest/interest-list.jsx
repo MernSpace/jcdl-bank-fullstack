@@ -7,11 +7,11 @@ import interestStore from "../../state/interestState.js";
 
 const InterestList = () => {
 
-    const {readBalanceListRequest,interestBalanceData} = interestStore();
+    const {readInterestBalanceListRequest,interestBalanceData} = interestStore();
 
     useEffect(() => {
         (async ()=>{
-            await readBalanceListRequest()
+            await readInterestBalanceListRequest()
         })()
     }, []);
 

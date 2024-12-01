@@ -34,6 +34,7 @@ router.get('/detail-add-balance/:id', auth, addBalanceController.detailBalance);
 
 router.post('/withdraw-balance/:cusID', auth, addBalanceController.withdrawBalance);
 router.get('/withdraw-balance-list', auth, addBalanceController.withdrawBalanceList);
+router.get('/customer-withdraw-balance-list/:id',auth, addBalanceController.customerWithdrewBalanceList)
 
 //interest API
 
@@ -43,6 +44,8 @@ router.get('/all-interest-balance', auth, interestBalanceController.readInterest
 router.get('/update-interest/:id', auth, interestBalanceController.addInterestBalance);
 router.get('/delete-interest/:invID', auth, interestBalanceController.deleteInterestBalance);
 router.get('/detail-interest-balance/:id', auth, interestBalanceController.detailInterestBalance);
+
+router.get('/customer-interest-list/:id',auth,interestBalanceController.customerInterestBalanceList)
 
 
 

@@ -33,8 +33,13 @@ const withdrewBalanceStore = create((set)=>({
 
     withdrewBalanceListRequest:async ()=>{
         let res = await axios.get(`${API_BASE_URL}/withdraw-balance-list`,AxiosHeader)
-        console.log(res.data)
         set({withdrewBalanceList:res.data})
+    },
+    customerWithdrewBalanceList:[],
+    withdrewBalanceListByID:async(ID)=>{
+        let res = await axios.get(`${API_BASE_URL}/customer-withdraw-balance-list/${ID}`,AxiosHeader)
+        console.log(res.data)
+        set({customerWithdrewBalanceList:res.data})
     }
 }))
 

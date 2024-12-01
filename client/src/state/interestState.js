@@ -44,7 +44,7 @@ const interestStore = create((set)=>({
 
     interestBalanceData:[],
 
-    readBalanceListRequest:async()=>{
+    readInterestBalanceListRequest:async()=>{
         let res = await axios.get(`${API_BASE_URL}/all-interest-balance`,AxiosHeader);
         if (res){
             set({interestBalanceData:res['data']})
@@ -61,7 +61,11 @@ const interestStore = create((set)=>({
         let res = await axios.get(`${API_BASE_URL}/delete-interest/${ID}`,AxiosHeader);
         return res.data['status'] === 'success'
     },
-
+    customerInterestList:[],
+    customerInterestBalanceListRequest:async (ID)=>{
+        let res = await axios.get(`${API_BASE_URL}/customer-interest-list/${ID}`,AxiosHeader);
+        set({customerInterestList:res.data})
+    }
 
 
 }))
