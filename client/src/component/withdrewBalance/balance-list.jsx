@@ -1,31 +1,28 @@
 import React, {useEffect} from 'react';
-import addBalanceStore from "../../state/addBalanceState.js";
+import withdrewBalanceState from "../../state/withdrewBalanceState.js";
 import Table from "react-bootstrap/Table";
 import {DeleteAlert} from "../../helper/deleteAlert.js";
 
-const AddBalanceList = () => {
-    const {readBalanceListRequest,balanceData,deleteBalanceRequest}= addBalanceStore()
+const BalanceList = () => {
+    const {withdrewBalanceListRequest,withdrewBalanceList} = withdrewBalanceState();
     useEffect(() => {
         (async ()=>{
-            await readBalanceListRequest()
+            await withdrewBalanceListRequest();
         })()
     }, []);
-
+    console.log(withdrewBalanceList);
     const DeleteItem = async (id) => {
         let Result = await DeleteAlert();
         console.log(id)
         if (Result.isConfirmed) {
-            let DeleteResult = await deleteBalanceRequest(id)
-            if (DeleteResult) {
-                await readBalanceListRequest();
-            }
+            console.log(id)
         }
     }
 
     return (
         <div>
             <div className=' px-3  mt-5'>
-                <h2 className='py-3'>Add Balance List</h2>
+                <h2 className='py-3'>Withdrew Balance List</h2>
                 <Table striped bordered hover>
                     <thead>
                     <tr>
@@ -40,8 +37,8 @@ const AddBalanceList = () => {
                     </tr>
                     </thead>
                     <tbody>
-                    {balanceData.length > 0 ? (
-                        balanceData.map((customer, index) => {
+                    {withdrewBalanceList.length > 0 ? (
+                        withdrewBalanceList.map((customer, index) => {
                             const createdDate = new Date(customer.createdAt);
 
                             // Format the createdAt date (Example: "DD/MM/YYYY")
@@ -57,9 +54,9 @@ const AddBalanceList = () => {
                                     <td>{customer.balance}</td>
                                     <td>{formattedDate}</td>
                                     <td className='text-center'>
-                                        <button className='btn btn-success mx-2'>Edit</button>
-                                        <button className='btn btn-danger'
-                                                onClick={DeleteItem.bind(this, customer._id)}>delete
+                                        <button onClick={DeleteItem.bind(this, customer._id)} className='btn btn-success mx-2'>Edit</button>
+                                        <button onClick={DeleteItem.bind(this, customer._id)} className='btn btn-danger'>
+                                            Delete
                                         </button>
                                     </td>
                                 </tr>
@@ -77,4 +74,4 @@ const AddBalanceList = () => {
     );
 };
 
-export default AddBalanceList;
+export default BalanceList;

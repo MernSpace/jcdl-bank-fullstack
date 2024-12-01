@@ -2,12 +2,14 @@ import React, {useEffect, useState} from 'react';
 import Select from "react-select";
 import {toast} from "react-toastify";
 import customerStore from "../../state/customerState.js";
-import addBalanceState from "../../state/addBalanceState.js";
+import {useNavigate} from "react-router-dom";
+import withdrewBalanceState from "../../state/withdrewBalanceState.js"
 
 const WithdrawBalanceForm = () => {
     const {createCustomerFormData,readCustomerRequest,customerDetailRequest,customerData,resetBalanceFormData} = customerStore();
-    const {withdrawBalanceRequest,withdrewBalanceFormData,withdrawBalanceFormOnChange,resetWithdrewBalanceForm} = addBalanceState();
+    const {withdrawBalanceRequest,withdrewBalanceFormData,withdrawBalanceFormOnChange,resetWithdrewBalanceForm} = withdrewBalanceState();
     const [selectedUserId, setSelectedUserId] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         ( async ()=>{
@@ -40,9 +42,8 @@ const WithdrawBalanceForm = () => {
             toast.error('No Enough investments');
         }else {
             await withdrawBalanceRequest(selectedUserId, withdrewBalanceFormData);
-            toast.info('Balance Added successfully');
-            resetBalanceFormData();
-            resetWithdrewBalanceForm()
+            toast.success('Balance Withdrew successfully');
+
         }
     }
     return (

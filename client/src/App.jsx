@@ -12,6 +12,8 @@ import LoginUserPage from "./page/login-user-page.jsx";
 import AddBalanceListPage from "./page/add-balance-list-page.jsx";
 import {Fragment} from "react";
 import AddInterestPage from "./page/add-interest-page.jsx";
+import WithdrewBalanceList from "./page/withdrew-balance-list.jsx";
+import InterestListPage from "./page/interest-list-page.jsx";
 
 function App() {
     if (getToken()) {
@@ -27,9 +29,12 @@ function App() {
 
                         <Route path="/add-balance" element={<AddBalancePage/>}/>
                         <Route path="/add-balance-list" element={<AddBalanceListPage/>}/>
+
                         <Route path="/withdraw-balance" element={<WithdrawBalancePage/>}/>
+                        <Route path="/withdraw-balance-list" element={<WithdrewBalanceList/>}/>
 
                         <Route path="/add-interest" element={<AddInterestPage/>}/>
+                        <Route path="/interest-list" element={<InterestListPage/>}/>
                     </Routes>
                 </BrowserRouter>
             </Fragment>

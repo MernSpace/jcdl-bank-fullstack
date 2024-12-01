@@ -1,5 +1,6 @@
 const addBalanceModel = require('../model/addBalanceModel');
 const customerModel = require('../model/customerModel');
+const withdrewModel = require('../model/withdrawBalanceModel');
 const mongoose = require('mongoose');
 
 exports.addBalance =async (req, res) => {
@@ -155,6 +156,8 @@ exports.detailBalance =async (req, res) => {
     }
 }
 
+//withdrew Balance
+
 
 exports.withdrawBalance =async (req, res) => {
     try{
@@ -166,12 +169,82 @@ exports.withdrawBalance =async (req, res) => {
         let upBalance = parseInt(cusBalance) - parseInt(withdrawBalance)
         let upData = await  customerModel.updateOne({_id:cusID},{balance:upBalance});
 
-        let createData = await addBalanceModel.create(req.body);
+        let createData = await withdrewModel.create(req.body);
 
 
         res.status(200).json({ upData,createData});
     }
     catch (e) {
         res.status(500).send({error: e});
+    }
+}
+
+
+exports.withdrawBalanceList = async (req,res)=>{
+    try {
+        const data = await withdrewModel.aggregate([
+            {
+
+                $addFields: {
+                    cusID: { $toObjectId: "$cusID" }
+                }
+            },
+            {
+
+                $lookup: {
+                    from: 'customers',
+                    localField: 'cusID',
+                    foreignField: '_id',
+                    as: 'customerDetails'
+                }
+            },
+            {
+                $unwind: {
+                    path: '$customerDetails',
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
+                // Project the necessary fields
+                $project: {
+                    _id: 1,
+                    cusID: 1,
+                    balance: 1,
+                    invoiceID: 1,
+                    customerDetails: {
+                        _id: 1,
+                        fName: 1,
+                        address: 1,
+                        phone: 1
+                    },
+                    createdAt: 1,
+                    updatedAt: 1
+                }
+            },
+            {
+
+                $sort: {
+                    createdAt: -1
+                }
+            }
+        ]);
+
+        const formattedData = data.map((item) => {
+            const createdDate = new Date(item.createdAt);
+            const formattedDate = `${createdDate.getMonth() + 1}/${createdDate.getDate()}/${createdDate.getFullYear()}`;
+            item.createdAt = formattedDate; // Set the formatted date
+            return item;
+        });
+
+        // Send the result
+        if (formattedData.length === 0) {
+            return res.status(404).json({ message: "No balances found or customers not linked." });
+        }
+
+        res.status(200).json(formattedData);  // Send the formatted data
+
+    } catch (e) {
+        console.error(e);  // Log error for debugging
+        res.status(500).send({ error: e.message });
     }
 }

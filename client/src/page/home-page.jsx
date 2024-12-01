@@ -10,66 +10,70 @@ import {
     Legend
 } from "recharts";
 import customerStore from "../state/customerState.js";
-import userStore from "../state/userState.js";
+import interestStore from "../state/interestState.js";
+import addBalanceStore from "../state/addBalanceState.js";
 
 
 const HomePage = () => {
     const {readCustomerRequest,customerData} = customerStore();
-    const {userDetailRequest} = userStore()
+    const {balanceData} = addBalanceStore();
+    const {readBalanceListRequest,interestBalanceData} = interestStore()
     useEffect(() => {
         (async ()=>{
            await readCustomerRequest()
-            await userDetailRequest('6747f4336a161df8d90a5c02')
-
+            await readBalanceListRequest()
         })()
     }, []);
+    const interestTotal = balanceData.reduce((total,item)=>{
+        return total + item.balance;
+    },0)
+
     const totalBalance = customerData.reduce((total, customer) => {
         return total + customer.balance;
     }, 0);
-    const data = [
-        {
-            name: "Page A",
-            uv: 4000,
-            pv: 2400,
-            amt: 2400
-        },
-        {
-            name: "Page B",
-            uv: 3000,
-            pv: 1398,
-            amt: 2210
-        },
-        {
-            name: "Page C",
-            uv: 2000,
-            pv: 9800,
-            amt: 2290
-        },
-        {
-            name: "Page D",
-            uv: 2780,
-            pv: 3908,
-            amt: 2000
-        },
-        {
-            name: "Page E",
-            uv: 1890,
-            pv: 4800,
-            amt: 2181
-        },
-        {
-            name: "Page F",
-            uv: 2390,
-            pv: 3800,
-            amt: 2500
-        },
-        {
-            name: "Page G",
-            uv: 3490,
-            pv: 4300,
-            amt: 2100
-        }
-    ];
+    console.log(balanceData);
+    const generateDailyReport = (data) => {
+        // Group the data by createdAt (date)
+        const report = data.reduce((acc, { createdAt, balance, invoiceID }) => {
+            if (!acc[createdAt]) {
+                acc[createdAt] = {
+                    totalInvoices: 0,
+                    totalBalance: 0,
+                    invoiceDetails: [],
+                };
+            }
+
+            // Add balance and invoice information
+            acc[createdAt].totalInvoices += 1;
+            acc[createdAt].totalBalance += balance;
+            acc[createdAt].invoiceDetails.push({
+                invoiceID,
+                balance,
+            });
+
+            return acc;
+        }, {});
+
+        // Convert to an array format similar to your example
+        return Object.keys(report).map((date) => ({
+            name: date,
+            totalInvoices: report[date].totalInvoices,
+            totalBalance: report[date].totalBalance,
+            invoiceDetails: report[date].invoiceDetails,
+        }));
+    };
+
+    const dailyReport = generateDailyReport(interestBalanceData);
+    console.log(dailyReport);
+    const dailyAddBalanceRepot = generateDailyReport(balanceData)
+
+
+
+
+
+
+
+
     return (
         <Dashboard>
             <div className='d-flex align-items-center justify-content-between px-5 my-5'>
@@ -87,7 +91,7 @@ const HomePage = () => {
                 </div>
                 <div className='card bg-danger text-center p-3 text-white shadow-lg'>
                     <h2>Total Interest</h2>
-                    <h3>$50000</h3>
+                    <h3>${interestTotal}</h3>
                 </div>
             </div>
             <div className=' d-flex align-items-center justify-content-between'>
@@ -95,7 +99,7 @@ const HomePage = () => {
                     <BarChart
                         width={650}
                         height={400}
-                        data={data}
+                        data={dailyReport}  // Ensure this data matches the structure you created
                         margin={{
                             top: 20,
                             right: 30,
@@ -104,20 +108,23 @@ const HomePage = () => {
                         }}
                     >
                         <CartesianGrid strokeDasharray="3 3"/>
-                        <XAxis dataKey="name"/>
-                        <YAxis yAxisId="left" orientation="left" stroke="#8884d8"/>
-                        <YAxis yAxisId="right" orientation="right" stroke="#82ca9d"/>
-                        <Tooltip/>
-                        <Legend/>
-                        <Bar yAxisId="left" dataKey="pv" fill="#8884d8"/>
-                        <Bar yAxisId="right" dataKey="uv" fill="#82ca9d"/>
+                        <XAxis dataKey="name" />
+                        <YAxis yAxisId="left" orientation="left" stroke="#8884d8" />
+                        <YAxis yAxisId="right" orientation="right" stroke="#82ca9d" />
+                        <Tooltip />
+                        <Legend />
+
+                        <Bar yAxisId="left" dataKey="totalInvoices" fill="#8884d8" />
+
+                        <Bar yAxisId="right" dataKey="totalBalance" fill="#82ca9d" />
                     </BarChart>
+
                 </div>
                 <div>
                     <BarChart
                         width={650}
                         height={400}
-                        data={data}
+                        data={dailyAddBalanceRepot}
                         margin={{
                             top: 20,
                             right: 30,
@@ -126,11 +133,15 @@ const HomePage = () => {
                         }}
                     >
                         <CartesianGrid strokeDasharray="3 3"/>
-                        <XAxis dataKey="name"/>
-                        <YAxis yAxisId="right" orientation="right" stroke="#82ca9d"/>
-                        <Tooltip/>
-                        <Legend/>
-                        <Bar yAxisId="right" dataKey="uv" fill="#82ca9d"/>
+                        <XAxis dataKey="name" />
+                        <YAxis yAxisId="left" orientation="left" stroke="#8884d8" />
+                        <YAxis yAxisId="right" orientation="right" stroke="#82ca9d" />
+                        <Tooltip />
+                        <Legend />
+
+                        <Bar yAxisId="left" dataKey="totalInvoices" fill="#8884d8" />
+
+                        <Bar yAxisId="right" dataKey="totalBalance" fill="#82ca9d" />
                     </BarChart>
                 </div>
             </div>

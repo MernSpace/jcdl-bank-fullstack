@@ -37,7 +37,7 @@ app.use(limiter)
 
 // Mongo DB Database Connection
 
-let URI = "mongodb+srv://<username>:<password>@cluster0.g7zuc4b.mongodb.net/jcdl"
+let URI = "mongodb+srv://<username>:<password>@cluster0.g7zuc4b.mongodb.net/jcdl?retryWrites=true&w=majority"
 const local = 'mongodb://localhost:27017/jcdl'
 let Option = { user: 'sifat355y', pass: 'sifat355y', autoIndex: true, useNewUrlParser: true, useUnifiedTopology: true }
 mongoose.connect(URI, Option)

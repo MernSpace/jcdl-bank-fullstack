@@ -17,8 +17,9 @@ const UserLoginForm = () => {
             toast.warning('Password is required');
         }else {
             await loginUserRequest(loginUserFormData);
-            resetLoginFormData();
             toast.success('Login Successfully!');
+            resetLoginFormData();
+            window.location.href = '/';
             navigate('/')
 
         }

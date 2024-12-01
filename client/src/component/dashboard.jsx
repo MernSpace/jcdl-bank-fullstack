@@ -73,24 +73,33 @@ const dashboard = (props) => {
                                     <div className="accordion-body">
 
                                         <h6 className='gap-2 py-3 border-bottom '>
-                                            <NavLink to='/add-balance-list'
-                                                     className="d-flex align-items-center  text-decoration-none text-black">
-                                                <i className="bi bi-cash mx-2"></i>
-                                                Balance List
-                                            </NavLink>
-                                        </h6>
-                                        <h6 className='gap-2 py-3 border-bottom '>
                                             <NavLink to='/add-balance'
                                                      className="d-flex align-items-center  text-decoration-none text-black">
                                                 <i className="bi bi-cash mx-2"></i>
                                                 Add Balance
                                             </NavLink>
                                         </h6>
+
+                                        <h6 className='gap-2 py-3 border-bottom '>
+                                            <NavLink to='/add-balance-list'
+                                                     className="d-flex align-items-center  text-decoration-none text-black">
+                                                <i className="bi bi-cash mx-2"></i>
+                                                Balance List
+                                            </NavLink>
+                                        </h6>
+
                                         <h6 className='gap-2 py-3 border-bottom'>
                                             <NavLink to='/withdraw-balance'
                                                      className="d-flex align-items-center  text-decoration-none text-black">
                                                 <i className="bi bi-cash mx-2"></i>
                                                 Withdraw Balance
+                                            </NavLink>
+                                        </h6>
+                                        <h6 className='gap-2 py-3 border-bottom'>
+                                            <NavLink to='/withdraw-balance-list'
+                                                     className="d-flex align-items-center  text-decoration-none text-black">
+                                                <i className="bi bi-cash mx-2"></i>
+                                                Withdraw Balance List
                                             </NavLink>
                                         </h6>
 
@@ -106,7 +115,7 @@ const dashboard = (props) => {
                                             aria-expanded="false" aria-controls="collapseFour">
                                         <h6 className='gap-2 '>
                                             <i className="bi bi-bank px-3"></i>
-                                            Balance</h6>
+                                            Interest</h6>
                                     </button>
                                 </h2>
                                 <div id="collapseFour" className="accordion-collapse "
@@ -115,27 +124,19 @@ const dashboard = (props) => {
                                     <div className="accordion-body">
 
                                         <h6 className='gap-2 py-3 border-bottom '>
-                                            <NavLink to='/add-balance-list'
+                                            <NavLink to='/add-interest'
                                                      className="d-flex align-items-center  text-decoration-none text-black">
                                                 <i className="bi bi-cash mx-2"></i>
-                                                Balance List
+                                                Add Interest
                                             </NavLink>
                                         </h6>
                                         <h6 className='gap-2 py-3 border-bottom '>
-                                            <NavLink to='/add-balance'
+                                            <NavLink to='/interest-list'
                                                      className="d-flex align-items-center  text-decoration-none text-black">
                                                 <i className="bi bi-cash mx-2"></i>
-                                                Add Balance
+                                                Interest List
                                             </NavLink>
                                         </h6>
-                                        <h6 className='gap-2 py-3 border-bottom'>
-                                            <NavLink to='/withdraw-balance'
-                                                     className="d-flex align-items-center  text-decoration-none text-black">
-                                                <i className="bi bi-cash mx-2"></i>
-                                                Withdraw Balance
-                                            </NavLink>
-                                        </h6>
-
                                     </div>
                                 </div>
                             </div>

@@ -32,6 +32,7 @@ const CusList = () => {
         <div>
 
             <div className=' px-3  mt-5'>
+                <h2 className='py-3'>Customer List</h2>
                 <Table striped bordered hover>
                     <thead>
                     <tr>

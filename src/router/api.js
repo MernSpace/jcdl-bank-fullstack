@@ -33,6 +33,7 @@ router.get('/delete-balance/:invID', auth, addBalanceController.deleteBalance);
 router.get('/detail-add-balance/:id', auth, addBalanceController.detailBalance);
 
 router.post('/withdraw-balance/:cusID', auth, addBalanceController.withdrawBalance);
+router.get('/withdraw-balance-list', auth, addBalanceController.withdrawBalanceList);
 
 //interest API
 

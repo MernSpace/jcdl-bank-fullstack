@@ -36,7 +36,7 @@ const InterestBalanceForm = () => {
 
     const onClick= async ()=>{
         await addInterestRequest(selectedUserId,interestFormData);
-        toast.info('Balance Added successfully');
+        toast.info('Interest Added successfully');
         resetFormData();
         resetInterestFormData();
     }

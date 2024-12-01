@@ -42,14 +42,14 @@ const interestStore = create((set)=>({
     },
 
 
-    balanceData:[],
+    interestBalanceData:[],
 
     readBalanceListRequest:async()=>{
         let res = await axios.get(`${API_BASE_URL}/all-interest-balance`,AxiosHeader);
         if (res){
-            set({balanceData:res['data']})
+            set({interestBalanceData:res['data']})
         }else{
-            set({balanceData:[]})
+            set({interestBalanceData:[]})
         }
     },
 

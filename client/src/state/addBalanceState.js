@@ -62,28 +62,6 @@ const addBalanceStore = create((set)=>({
         return res.data['status'] === 'success'
     },
 
-    withdrewBalanceFormData:{cusID:"",invoiceID:"",balance:""},
-    withdrawBalanceFormOnChange:(name,value)=>{
-        set((state)=>({
-            withdrewBalanceFormData:{
-                ...state.withdrewBalanceFormData,
-                [name]:value
-            }
-        }))
-    },
-    resetWithdrewBalanceForm: () => {
-        set({
-            withdrewBalanceFormData: {
-                cusID: "",
-                invoiceID: "",
-                balance: "",
-            }
-        });
-    },
-    withdrawBalanceRequest:async (id,postBody)=>{
-        let res = await axios.post(`${API_BASE_URL}/withdraw-balance/${id}`,postBody,AxiosHeader)
-        return res.data['status'] === 'success'
-    }
 
 
 }))
